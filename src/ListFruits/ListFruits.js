@@ -1,22 +1,23 @@
 import React, {Component} from 'react';
-import {ScrollView, View, Text, StyleSheet} from 'react-native';
+import {ScrollView, StyleSheet} from 'react-native';
 import Fruits from './Fruits';
 
 export default class ListFruits extends Component {
-  constructor(props) {
-    super(props);
-    this.props = props;
-    this.state = {};
+  renderItem(item, index) {
+    return (
+      <Fruits
+        fruit={item}
+        key={index}
+        keyboardStatus={this.props.keyboardStatus}
+        handleDeleteFruit={() => this.props.handleDeleteFruit(index)}
+      />
+    );
   }
-
-  renderItem(item) {
-    return <Fruits fruit={item} />;
-  } 
 
   render() {
     return (
-      <ScrollView style={styles.container} >
-        {this.props.fruits.map((item, index) => this.renderItem(item))}
+      <ScrollView style={styles.container}>
+        {this.props.fruits.map((item, index) => this.renderItem(item, index))}
       </ScrollView>
     );
   }
@@ -26,6 +27,6 @@ const styles = StyleSheet.create({
   container: {
     height: '100%',
     paddingHorizontal: 12,
-    paddingVertical: 12
-  }
-})
+    paddingVertical: 12,
+  },
+});
