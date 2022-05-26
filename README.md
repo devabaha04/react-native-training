@@ -19,3 +19,9 @@ ex: prac1/minhnh
 
 
 ....have fun & good luck!!
+
+## Estimate Time Completed
+- Training 1: 10h30 
+- Training 2:
+
+

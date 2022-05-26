@@ -61,14 +61,16 @@ export default class App extends Component {
   }
 
   getRandomColor() {
+    let numberRandom = this.getRandomNumber(0, 7)
     return colors.find((item, index) => {
-      if (index === this.getRandomNumber(0, 7)) return item;
+      if (index === numberRandom) return item
     });
   }
 
   getImageRandom() {
+    let numberRandom = this.getRandomNumber(0, 5)
     return linkImages.find((item, index) => {
-      if (index === this.getRandomNumber(0, 4)) return item;
+      if (index === numberRandom) return item;
     });
   }
 
