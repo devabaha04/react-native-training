@@ -1,3 +1,1 @@
-import ListFruits from "./ListFruits";
-
-export default ListFruits
+export {default} from './ListFruits';

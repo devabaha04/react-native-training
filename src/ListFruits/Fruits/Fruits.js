@@ -3,9 +3,17 @@ import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class Fruits extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
+
+  shouldComponentUpdate(nextProps) {
+    if (
+      nextProps.fruit.name !== this.props.fruit.name ||
+      nextProps.fruit.color !== this.props.fruit.color ||
+      nextProps.fruit.imageUrl !== this.props.fruit.imageUrl
+    ) {
+      return true;
+    }
+
+    return false;
   }
 
   render() {

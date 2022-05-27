@@ -23,21 +23,7 @@ export default class App extends Component {
   };
   isUnmounted = false;
 
-  getRandomNumber(min, max) {
-    return Math.floor(Math.random() * (max - min));
-  }
-
-  getData() {
-    fetch('https://api.github.com/repos/minhnguyenit14/mockend/readme')
-      .then((res) => res.json())
-      .then((data) => {
-        let contentData = base64.decode(data.content.split('\n').join(''));
-        this.setState({
-          fruits: JSON.parse(contentData).fruits,
-          isLoading: false,
-        });
-      });
-  }
+  abortController = new AbortController();
 
   componentDidMount() {
     !this.isUnmounted && this.getData();
@@ -60,18 +46,49 @@ export default class App extends Component {
     );
   }
 
+  componentWillUnmount() {
+    this.isUnmounted = true;
+    this.keyboardDidShowSubscription.remove();
+    this.keyboardDidHideSubscription.remove();
+
+    this.abortController.abort();
+  }
+
+  getRandomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min));
+  }
+
   getRandomColor() {
-    let numberRandom = this.getRandomNumber(0, 7)
+    let numberRandom = this.getRandomNumber(0, 7);
     return colors.find((item, index) => {
-      if (index === numberRandom) return item
+      if (index === numberRandom) return item;
     });
   }
 
   getImageRandom() {
-    let numberRandom = this.getRandomNumber(0, 5)
+    let numberRandom = this.getRandomNumber(0, 5);
     return linkImages.find((item, index) => {
       if (index === numberRandom) return item;
     });
+  }
+
+  getData() {
+    fetch('https://api.github.com/repos/minhnguyenit14/mockend/readme', {
+      signal: this.abortController.signal,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        let contentData = base64.decode(data.content.split('\n').join(''));
+        this.setState({
+          fruits: JSON.parse(contentData).fruits,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        this.setState({isLoading: false});
+      });
   }
 
   handleChangeInput = (value) => {
@@ -90,33 +107,26 @@ export default class App extends Component {
 
   handleAddFruit = () => {
     !this.state.isDisable &&
-      this.setState({
+      this.setState((prevState) => ({
         fruits: [
           {
-            name: this.state.fruitValue,
+            name: prevState.fruitValue,
             color: this.getRandomColor(),
             imageUrl: this.getImageRandom(),
           },
-          ...this.state.fruits,
+          ...prevState.fruits,
         ],
         fruitValue: '',
         isDisable: true,
-      });
+      }));
   };
 
   handleDeleteFruit = (indexDelete) => {
-    let newFruits = this.state.fruits;
-    newFruits = newFruits.filter((item, index) => index !== indexDelete);
-    this.setState({
-      fruits: newFruits,
-    });
+    let fruits = [...this.state.fruits];
+    // newFruits = newFruits.filter((item, index) => index !== indexDelete);
+    fruits.splice(indexDelete, 1);
+    this.setState({fruits});
   };
-
-  componentWillUnmount() {
-    this.isUnmounted = true;
-    this.keyboardDidShowSubscription.remove();
-    this.keyboardDidHideSubscription.remove();
-  }
 
   render() {
     return (
@@ -126,7 +136,7 @@ export default class App extends Component {
           <TextInput
             placeholder="Enter fruits..."
             style={styles.inputForm}
-            onSubmitEditing={Keyboard.dismiss}
+            // onSubmitEditing={Keyboard.dismiss}
             onChangeText={this.handleChangeInput}
             value={this.state.fruitValue}
           />
