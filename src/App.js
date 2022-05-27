@@ -48,10 +48,12 @@ export default class App extends Component {
 
   componentWillUnmount() {
     this.isUnmounted = true;
+
     this.keyboardDidShowSubscription.remove();
     this.keyboardDidHideSubscription.remove();
 
-    this.abortController.abort();
+    //Cancel Request
+    this.abortController.abort(); 
   }
 
   getRandomNumber(min, max) {
@@ -79,9 +81,13 @@ export default class App extends Component {
       .then((res) => res.json())
       .then((data) => {
         let contentData = base64.decode(data.content.split('\n').join(''));
-        this.setState({
-          fruits: JSON.parse(contentData).fruits,
-        });
+        try {
+          this.setState({
+            fruits: JSON.parse(contentData).fruits,
+          });
+        } catch (error) {
+          console.log(error)
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -123,7 +129,6 @@ export default class App extends Component {
 
   handleDeleteFruit = (indexDelete) => {
     let fruits = [...this.state.fruits];
-    // newFruits = newFruits.filter((item, index) => index !== indexDelete);
     fruits.splice(indexDelete, 1);
     this.setState({fruits});
   };

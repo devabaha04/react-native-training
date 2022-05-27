@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class Fruits extends Component {
 
+  // Kiểm soát render
   shouldComponentUpdate(nextProps) {
     if (
       nextProps.fruit.name !== this.props.fruit.name ||
