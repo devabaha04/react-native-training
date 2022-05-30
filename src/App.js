@@ -1,28 +1,13 @@
 import React, {Component} from 'react';
-import {
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  ActivityIndicator,
-  Keyboard,
-} from 'react-native';
-import base64 from 'react-native-base64';
-
+import {SafeAreaView, View, Text, StyleSheet} from 'react-native';
+import FinanceManagement from './FinanceManagement';
 
 export default class App extends Component {
-  
   render() {
     return (
-      <SafeAreaView>
-        <Text>Trainning 2</Text>
-      </SafeAreaView>
+      <>
+        <FinanceManagement />
+      </>
     );
   }
 }
-
-const styles = StyleSheet.create({
-
-});

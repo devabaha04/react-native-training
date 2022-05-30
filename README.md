@@ -22,6 +22,8 @@ ex: prac1/minhnh
 
 ## Estimate Time Completed
 - Training 1: 10h30 
-- Training 2:
+- Training 2: 
+  - Login Screen: 2h20
+  - Profile Screen: 
 
 
