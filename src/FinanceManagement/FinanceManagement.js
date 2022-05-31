@@ -4,10 +4,10 @@ import Login from './Login';
 import Profile from './Profile';
 import RecentTransactions from './RecentTransactions';
 
-const navigate = (key, props = {}) => {
+const navigate = (key, props) => {
   switch (key) {
     case 'LOGIN':
-      return <Login />;
+      return <Login handleLogin={props} />;
     case 'PROFILE':
       return <Profile handleNavigate={props} />;
     case 'RECENT_TRANS':
@@ -43,7 +43,7 @@ class FinanceManagement extends Component {
             navigate('PROFILE', this.handleNavigate)
           )
         ) : (
-          <Login handleLogin={this.handleLogin} />
+          navigate('LOGIN', this.handleLogin)
         )}
       </View>
     );
