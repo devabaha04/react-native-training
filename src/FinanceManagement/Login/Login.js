@@ -51,7 +51,6 @@ export default class Login extends Component {
   };
 
   render() {
-    console.log(this.props)
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.logoWrapper}>
