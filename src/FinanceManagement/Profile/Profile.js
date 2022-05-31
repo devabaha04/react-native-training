@@ -1,11 +1,21 @@
 import React, {Component} from 'react';
-import {View, SafeAreaView, Text, StyleSheet, Image, TouchableOpacity, ScrollView} from 'react-native';
+import {
+  View,
+  SafeAreaView,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  TouchableHighlight,
+} from 'react-native';
 import IconFontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import IconIonicons from 'react-native-vector-icons/Ionicons';
 import IconSimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import IconMaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 import {imageLink} from '../../constant';
+import {navigate} from '../FinanceManagement';
 
 export default class Profile extends Component {
   render() {
@@ -55,66 +65,76 @@ export default class Profile extends Component {
           </View>
 
           <ScrollView style={styles.listTrans}>
-            <View style={styles.transItem}>
+            <TouchableOpacity
+              style={styles.transItem}
+              onPress={() => this.props.handleNavigate()}>
               <View style={styles.wrapper}>
                 <View style={styles.imageWrapper}>
                   <IconIonicons name="arrow-up" color={'#000'} size={30} />
                 </View>
                 <View style={styles.infoRecent}>
                   <Text style={styles.statusText}>Sent</Text>
-                  <Text style={styles.description} >Sending Payment to Client</Text>
+                  <Text style={styles.description}>
+                    Sending Payment to Client
+                  </Text>
                 </View>
               </View>
-              <View style={styles.moneyWrapper} >
-                <Text style={styles.moneyText} >$150</Text>
+              <View style={styles.moneyWrapper}>
+                <Text style={styles.moneyText}>$150</Text>
               </View>
-            </View>
-            <View style={styles.transItem}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.transItem}
+              onPress={() => this.props.handleNavigate()}>
               <View style={styles.wrapper}>
                 <View style={styles.imageWrapper}>
                   <IconIonicons name="arrow-down" color={'#000'} size={30} />
                 </View>
                 <View style={styles.infoRecent}>
                   <Text style={styles.statusText}>Receive</Text>
-                  <Text style={styles.description} >Receive Salary from company</Text>
+                  <Text style={styles.description}>
+                    Receive Salary from company
+                  </Text>
                 </View>
               </View>
-              <View style={styles.moneyWrapper} >
-                <Text style={styles.moneyText} >$250</Text>
+              <View style={styles.moneyWrapper}>
+                <Text style={styles.moneyText}>$250</Text>
               </View>
-            </View>
-            <View style={styles.transItem}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.transItem}
+              onPress={() => this.props.handleNavigate()}>
               <View style={styles.wrapper}>
                 <View style={styles.imageWrapper}>
                   <IconIonicons name="arrow-up" color={'#000'} size={30} />
                 </View>
                 <View style={styles.infoRecent}>
                   <Text style={styles.statusText}>Loan</Text>
-                  <Text style={styles.description} >Loan for the Car</Text>
+                  <Text style={styles.description}>Loan for the Car</Text>
                 </View>
               </View>
-              <View style={styles.moneyWrapper} >
-                <Text style={styles.moneyText} >$400</Text>
+              <View style={styles.moneyWrapper}>
+                <Text style={styles.moneyText}>$400</Text>
               </View>
-            </View>
+            </TouchableOpacity>
           </ScrollView>
         </View>
 
-        <View style={styles.navWrapper} >
+        <View style={styles.navWrapper}>
           <TouchableOpacity>
-            <IconAntDesign name='home' size={26} />
+            <IconAntDesign name="home" size={26} />
           </TouchableOpacity>
           <TouchableOpacity>
-            <IconAntDesign name='creditcard' size={26} />
+            <IconAntDesign name="creditcard" size={26} />
           </TouchableOpacity>
           <TouchableOpacity>
-            <IconAntDesign name='plussquare' size={26} />
+            <IconAntDesign name="plussquare" size={26} color={'#323473'} />
           </TouchableOpacity>
           <TouchableOpacity>
-            <IconFontAwesome5 name='dollar-sign' size={26} />
+            <IconFontAwesome5 name="dollar-sign" size={26} />
           </TouchableOpacity>
           <TouchableOpacity>
-            <IconAntDesign name='user' size={26} />
+            <IconAntDesign name="user" size={26} />
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -130,7 +150,7 @@ const styles = StyleSheet.create({
   wrapper: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   profile: {
     backgroundColor: '#fff',
@@ -179,7 +199,7 @@ const styles = StyleSheet.create({
   analystItem: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 12,
+    paddingHorizontal: 18,
     borderRightWidth: 1,
     borderRightColor: '#ccc',
   },
@@ -225,7 +245,7 @@ const styles = StyleSheet.create({
   listTrans: {
     marginTop: 18,
     marginBottom: 14,
-    marginHorizontal: 0
+    marginHorizontal: 0,
   },
   transItem: {
     backgroundColor: '#fff',
@@ -236,9 +256,6 @@ const styles = StyleSheet.create({
     paddingVertical: 18,
     marginVertical: 10,
     borderRadius: 18,
-    shadowColor: '#C7CCDB',
-    shadowOpacity: 18,
-    shadowRadius: 4,
   },
   imageWrapper: {
     backgroundColor: '#E0E2F9',
@@ -247,26 +264,24 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   infoRecent: {
-    paddingLeft: 14
+    paddingLeft: 14,
   },
   statusText: {
     fontSize: 16,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   description: {
     fontSize: 14,
     color: '#BABABA',
-    marginTop: 6
+    marginTop: 6,
   },
-  moneyWrapper: {
-  },
+  moneyWrapper: {},
   moneyText: {
     fontSize: 16,
     fontWeight: '800',
   },
   navWrapper: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-
-  }
+    justifyContent: 'space-around',
+  },
 });

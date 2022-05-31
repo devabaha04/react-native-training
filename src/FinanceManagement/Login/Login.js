@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableHighlight,
   TouchableOpacity,
+  Keyboard
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Fontisto';
 import IconAweSome5 from 'react-native-vector-icons/FontAwesome5';
@@ -16,7 +17,32 @@ import {imageLink} from '../../constant';
 export default class Login extends Component {
   state = {
     showPassword: false,
+    keyboardOpen: false
   };
+
+  componentDidMount() {
+    this.keyboardDidShowEmitter = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        this.setState({
+          keyboardOpen: true,
+        });
+      },
+    );
+    this.keyboardDidHideEmitter = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        this.setState({
+          keyboardOpen: false,
+        });
+      },
+    );
+  }
+
+  componentWillUnmount() {
+    this.keyboardDidHideEmitter.remove()
+    this.keyboardDidShowEmitter.remove()
+  }
 
   handleShowPassword = () => {
     this.setState((prevState) => ({
@@ -65,6 +91,7 @@ export default class Login extends Component {
 
           <TouchableHighlight 
             style={styles.btnLogin} 
+            onPress={() => this.props.handleLogin()}
           >
             <Text style={styles.textBtnLogin}>Login</Text>
           </TouchableHighlight>
