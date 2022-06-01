@@ -1,19 +1,8 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import Login from './Login';
 import Profile from './Profile';
 import RecentTransactions from './RecentTransactions';
-
-const navigate = (key, props) => {
-  switch (key) {
-    case 'LOGIN':
-      return <Login handleLogin={props} />;
-    case 'PROFILE':
-      return <Profile handleNavigate={props} />;
-    case 'RECENT_TRANS':
-      return <RecentTransactions handleNavigate={props} />;
-  }
-};
 
 class FinanceManagement extends Component {
   state = {
@@ -38,12 +27,12 @@ class FinanceManagement extends Component {
       <View style={styles.container}>
         {this.state.isLogged ? (
           this.state.isNavigate ? (
-            navigate('RECENT_TRANS', this.handleNavigate)
+            <RecentTransactions handleNavigate={this.handleNavigate} />
           ) : (
-            navigate('PROFILE', this.handleNavigate)
+            <Profile handleNavigate={this.handleNavigate} />
           )
         ) : (
-          navigate('LOGIN', this.handleLogin)
+          <Login handleLogin={this.handleLogin} />
         )}
       </View>
     );
@@ -52,8 +41,7 @@ class FinanceManagement extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    height: '100%',
+    flex: 1,
     backgroundColor: '#F1F6FE',
   },
 });

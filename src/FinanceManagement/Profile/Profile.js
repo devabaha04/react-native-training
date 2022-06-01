@@ -15,7 +15,6 @@ import IconIonicons from 'react-native-vector-icons/Ionicons';
 import IconSimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import IconMaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 import {imageLink} from '../../constant';
-import {navigate} from '../FinanceManagement';
 
 export default class Profile extends Component {
   render() {
@@ -53,11 +52,14 @@ export default class Profile extends Component {
           <View style={styles.header}>
             <View style={styles.header_left}>
               <Text style={styles.title}>Overview</Text>
-              <IconMaterialCommunity
-                name="bell-outline"
-                size={21}
-                color={'#484B84'}
-              />
+              <TouchableOpacity style={{ position: 'relative' }}>
+                <IconMaterialCommunity
+                  name="bell-outline"
+                  size={21}
+                  color={'#484B84'}
+                />
+                <View style={styles.dot}></View>
+              </TouchableOpacity>
             </View>
             <View style={styles.header_right}>
               <Text style={styles.timestamp}>Sept 13, 2020</Text>
@@ -121,20 +123,27 @@ export default class Profile extends Component {
         </View>
 
         <View style={styles.navWrapper}>
-          <TouchableOpacity>
-            <IconAntDesign name="home" size={26} />
+          <TouchableOpacity
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <IconAntDesign name="home" size={24} />
           </TouchableOpacity>
-          <TouchableOpacity>
-            <IconAntDesign name="creditcard" size={26} />
+          <TouchableOpacity
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <IconAntDesign name="creditcard" size={24} />
           </TouchableOpacity>
-          <TouchableOpacity>
-            <IconAntDesign name="plussquare" size={26} color={'#323473'} />
+          <TouchableOpacity
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{ backgroundColor: '#323473', padding: 12, borderRadius: 12 }} >
+              <IconAntDesign name="plus" size={18} color={'#fff'} />
+            </View>
           </TouchableOpacity>
-          <TouchableOpacity>
-            <IconFontAwesome5 name="dollar-sign" size={26} />
+          <TouchableOpacity
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <IconFontAwesome5 name="dollar-sign" size={24} />
           </TouchableOpacity>
-          <TouchableOpacity>
-            <IconAntDesign name="user" size={26} />
+          <TouchableOpacity
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <IconAntDesign name="user" size={24} />
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -144,8 +153,7 @@ export default class Profile extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    height: '100%',
+    flex: 1,
   },
   wrapper: {
     flexDirection: 'row',
@@ -159,10 +167,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 18,
     borderRadius: 24,
-    shadowColor: '#C7CCDB',
-    shadowOpacity: 19,
-    shadowRadius: 20,
-    flex: 1,
+    flex: 0.8,
+    shadowColor: '#E0E7F6',
+    shadowOpacity: 34,
+    shadowRadius: 10,
+    shadowOffset: {
+      width: 1,
+      height: 28
+    },
+    elevation: 3
   },
   bars: {
     flexDirection: 'row',
@@ -181,12 +194,13 @@ const styles = StyleSheet.create({
   },
   nameUser: {
     color: '#484B84',
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 22,
+    fontWeight: 'bold',
     paddingTop: 8,
   },
   positionCareer: {
-    fontSize: 14,
+    fontSize: 12,
+    fontWeight: '600',
     color: '#000',
     paddingTop: 10,
   },
@@ -194,7 +208,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 26,
+    paddingTop: 36,
   },
   analystItem: {
     justifyContent: 'center',
@@ -208,7 +222,7 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: '500',
     color: '#484B84',
     paddingBottom: 12,
   },
@@ -217,14 +231,14 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   recent: {
-    flex: 1.5,
-    marginHorizontal: 28,
+    flex: 1,
     marginTop: 18,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingHorizontal: 24
   },
   header_left: {
     flexDirection: 'row',
@@ -237,6 +251,15 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     marginRight: 8,
   },
+  dot: {
+    width: 6,
+    height: 6,
+    backgroundColor: '#E50002',
+    borderRadius: 15,
+    position: 'absolute',
+    top: 3,
+    right: 2
+  },
   timestamp: {
     color: '#3A3E7A',
     fontSize: 14,
@@ -245,17 +268,25 @@ const styles = StyleSheet.create({
   listTrans: {
     marginTop: 18,
     marginBottom: 14,
-    marginHorizontal: 0,
+    paddingHorizontal: 24
   },
   transItem: {
     backgroundColor: '#fff',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 18,
+    alignItems: 'flex-end',
+    paddingHorizontal: 24,
     paddingVertical: 18,
     marginVertical: 10,
-    borderRadius: 18,
+    borderRadius: 28,
+    shadowColor: '#E0E7F6',
+    shadowOpacity: 8,
+    shadowRadius: 16,
+    shadowOffset: {
+      width: 1,
+      height: 20
+    },
+    elevation: 3
   },
   imageWrapper: {
     backgroundColor: '#E0E2F9',
@@ -271,17 +302,15 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   description: {
-    fontSize: 14,
-    color: '#BABABA',
+    fontSize: 12,
+    color: '#A8A8A8',
     marginTop: 6,
   },
-  moneyWrapper: {},
   moneyText: {
     fontSize: 16,
     fontWeight: '800',
   },
   navWrapper: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
   },
 });

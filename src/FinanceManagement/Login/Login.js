@@ -8,7 +8,7 @@ import {
   TextInput,
   TouchableHighlight,
   TouchableOpacity,
-  Keyboard
+  Keyboard,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Fontisto';
 import IconAweSome5 from 'react-native-vector-icons/FontAwesome5';
@@ -17,7 +17,7 @@ import {imageLink} from '../../constant';
 export default class Login extends Component {
   state = {
     showPassword: false,
-    keyboardOpen: false
+    keyboardOpen: false,
   };
 
   componentDidMount() {
@@ -40,8 +40,8 @@ export default class Login extends Component {
   }
 
   componentWillUnmount() {
-    this.keyboardDidHideEmitter.remove()
-    this.keyboardDidShowEmitter.remove()
+    this.keyboardDidHideEmitter.remove();
+    this.keyboardDidShowEmitter.remove();
   }
 
   handleShowPassword = () => {
@@ -88,10 +88,9 @@ export default class Login extends Component {
             </View>
           </View>
 
-          <TouchableHighlight 
-            style={styles.btnLogin} 
-            onPress={() => this.props.handleLogin()}
-          >
+          <TouchableHighlight
+            style={styles.btnLogin}
+            onPress={() => this.props.handleLogin()}>
             <Text style={styles.textBtnLogin}>Login</Text>
           </TouchableHighlight>
 
@@ -111,8 +110,7 @@ export default class Login extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    height: '100%',
+    flex: 1,
   },
   logoWrapper: {
     flex: 1,
@@ -136,8 +134,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     borderRadius: 16,
     shadowColor: '#E0E7F6',
-    shadowOpacity: 4,
-    shadowRadius: 12,
+    shadowOpacity: 18,
+    shadowRadius: 20,
+    elevation: 3,
+    shadowOffset: {
+      width: 1,
+      height: 14
+    }
   },
   formLabel: {
     fontSize: 16,
@@ -158,7 +161,7 @@ const styles = StyleSheet.create({
   btnLogin: {
     backgroundColor: '#333474',
     marginTop: 16,
-    paddingVertical: 15,
+    paddingVertical: 18,
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',

@@ -25,25 +25,53 @@ export default class RecentTransactions extends Component {
     this.setState({indexActive: index});
   };
 
+  imageData = [
+    'https://static.fullstack.edu.vn/static/media/f8-icon.7ad2b161d5e80c87e516.png',
+    'https://static.fullstack.edu.vn/static/media/f8-icon.7ad2b161d5e80c87e516.png',
+    'https://static.fullstack.edu.vn/static/media/f8-icon.7ad2b161d5e80c87e516.png',
+  ];
+
+  renderImage = ({item, index}) => {
+    let startX, startY;
+    startX = Math.floor(((Math.PI * (index - 1)) *  -32) / 2);
+    startY = Math.floor(((Math.PI * index) * 8) * 2);
+    return (
+      <View
+        style={[
+          styles.layer7,
+          {
+            top: startY,
+            left: startX,
+          },
+        ]}>
+        <Image source={{uri: item}} style={[styles.secondImg]} />
+      </View>
+    );
+  };
+
   render() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.navWrapper}>
-          <TouchableOpacity onPress={() => this.props.handleNavigate()} >
-            <IconFontAwesome5 name={'chevron-left'} style={styles.iconNav} />
+          <TouchableOpacity
+            style={styles.iconNav}
+            onPress={() => this.props.handleNavigate()}>
+            <IconFontAwesome5 name={'chevron-left'} size={20} />
           </TouchableOpacity>
-          <TouchableOpacity>
-            <IconFontAwesome5 name={'search'} style={styles.iconNav} />
+          <TouchableOpacity style={styles.iconNav}>
+            <IconFontAwesome5 name={'search'} size={20} />
           </TouchableOpacity>
         </View>
         <View style={styles.headerWrapper}>
           <Text style={styles.title}>Recent Transactions</Text>
-          <Text style={styles.txtHelper}>See all</Text>
+          <TouchableOpacity>
+            <Text style={styles.txtHelper}>See all</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.tabsWrapper}>
           {Tabs.map((item, index) => (
             <TouchableHighlight
-              underlayColor={'#454981'}
+              underlayColor={'#C7CCDB'}
               key={index}
               style={[
                 styles.tabBtn,
@@ -65,9 +93,11 @@ export default class RecentTransactions extends Component {
         </View>
 
         <View style={styles.content}>
-          <Text style={styles.contentTitle}>Today</Text>
+          <Text style={[styles.contentTitle, {paddingHorizontal: 18}]}>
+            Today
+          </Text>
 
-          <ScrollView style={styles.listTrans}>
+          <View style={[styles.listTrans, {paddingHorizontal: 18}]}>
             <TouchableOpacity style={styles.transItem}>
               <View style={styles.wrapper}>
                 <View style={styles.imageWrapper}>
@@ -82,48 +112,19 @@ export default class RecentTransactions extends Component {
                 <Text style={styles.moneyText}>$30.00</Text>
               </View>
             </TouchableOpacity>
-          </ScrollView>
+          </View>
 
-          <View style={styles.layer1}>
-            <Image
-              source={{uri: imageLink}}
-              style={[styles.secondaryImg, { 
-                top: Platform.OS === 'ios' ? 20 : -10
-              }]}
-            />
-            <Image
-              source={{uri: imageLink}}
-              style={[styles.secondaryImg, {
-                top: Platform.OS === 'ios' ? 120 : 88,
-                left: Platform.OS === 'ios' ? 44 : 18,
-              }]}
-            />
-            <Image
-              source={{uri: imageLink}}
-              style={[styles.secondaryImg, {
-                top: Platform.OS === 'ios' ? 120 : 88,
-                right: Platform.OS === 'ios' ? 44 : 18,
-              }]}
-            />
-            <View style={styles.layer2}>
-              <View style={styles.layer3}>
-                <Image source={{uri: imageLink}} style={styles.primaryImg} />
-              </View>
+          <View style={[styles.layer1, {paddingHorizontal: 18}]}>
+            <Image source={{uri: imageLink}} style={styles.primaryImg} />
+            <View style={styles.layer2}></View>
+            <View style={styles.layer3}></View>
+            <View style={styles.layer4}></View>
+            <View style={styles.layer5}></View>
+            <View style={styles.layer6}>
+              {this.imageData.map((item, index) =>
+                this.renderImage({item, index}),
+              )}
             </View>
-            <Image
-              source={{uri: imageLink}}
-              style={[styles.secondaryImg, {
-                bottom: Platform.OS === 'ios' ? 50 : 20,
-                left: Platform.OS === 'ios' ? 80 : 60,
-              }]}
-            />
-            <Image
-              source={{uri: imageLink}}
-              style={[styles.secondaryImg, {
-                bottom: Platform.OS === 'ios' ? 50 : 20,
-                right:  Platform.OS === 'ios' ? 80 : 60,
-              }]}
-            />
           </View>
 
           <TouchableHighlight style={styles.detailBtn}>
@@ -137,7 +138,6 @@ export default class RecentTransactions extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 18,
     flex: 1,
   },
   navWrapper: {
@@ -145,17 +145,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 12,
-    marginBottom: 24,
-    paddingHorizontal: 12
+    marginBottom: 18,
   },
   iconNav: {
-    color: '#333',
-    fontSize: 20,
+    paddingHorizontal: 24,
+    paddingVertical: 8,
   },
   headerWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
+    paddingHorizontal: 18,
   },
   title: {
     fontSize: 24,
@@ -171,13 +171,14 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     marginTop: 26,
+    paddingHorizontal: 18,
   },
   tabBtn: {
     marginRight: 16,
     borderRadius: 14,
-    shadowColor: '#C7CCDB',
-    shadowOpacity: 20,
-    shadowRadius: 4,
+    shadowColor: '#E3E9F6',
+    shadowOpacity: 30,
+    shadowRadius: 16,
   },
   txtBtn: {
     fontSize: 13,
@@ -185,16 +186,18 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   content: {
-    flex: 2,
-    marginTop: 6,
+    flex: 1,
+    marginTop: 8,
   },
   contentTitle: {
     fontSize: 20,
     fontWeight: '700',
     color: '#454981',
-    paddingVertical: 16,
+    paddingVertical: 18,
   },
-  listTrans: {},
+  listTrans: {
+    marginBottom: 12,
+  },
   wrapper: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -209,6 +212,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 16,
     marginBottom: 12,
+    shadowColor: '#E3E9F6',
+    shadowOpacity: 30,
+    shadowRadius: 16,
+    shadowOffset: {
+      width: 1,
+      height: 24,
+    },
   },
   infoRecent: {
     marginLeft: 10,
@@ -229,10 +239,11 @@ const styles = StyleSheet.create({
   },
   detailBtn: {
     backgroundColor: '#333474',
-    paddingVertical: 16,
-    borderRadius: 24,
+    paddingVertical: 20,
+    borderRadius: 28,
     marginTop: 18,
     marginBottom: 8,
+    marginHorizontal: 18,
   },
   textDetail: {
     color: '#fff',
@@ -240,38 +251,60 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
   },
+  primaryImg: {
+    width: 90,
+    height: 90,
+    borderRadius: 50,
+    borderWidth: 6,
+    borderColor: '#fff',
+  },
   layer1: {
-    position: 'relative',
-    flex: 3,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'relative',
   },
   layer2: {
-    paddingHorizontal: 40,
-    paddingVertical: 40,
-    borderWidth: 1,
-    borderColor: '#E3E5FF',
-    borderRadius: 300,
-  },
-  layer3: {
-    paddingHorizontal: 30,
-    paddingVertical: 30,
-    borderWidth: 20,
-    borderColor: '#CFE0FE',
-    borderRadius: 300,
-  },
-  primaryImg: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    position: 'absolute',
     borderWidth: 4,
     borderColor: '#363977',
+    borderRadius: 120,
+    padding: 45,
   },
-  secondaryImg: {
-    width: 40,
-    height: 40,
+  layer3: {
     position: 'absolute',
-    zIndex: 999,
-    borderRadius: 40,
+    borderWidth: 20,
+    borderColor: '#D0DFFE',
+    borderRadius: 120,
+    padding: 80,
+  },
+  layer4: {
+    position: 'absolute',
+    borderWidth: 2,
+    borderColor: '#fff',
+    borderRadius: 120,
+    padding: 100,
+  },
+  layer5: {
+    position: 'absolute',
+    borderWidth: 1,
+    borderColor: '#E2E4FE',
+    borderRadius: 140,
+    padding: 138,
+  },
+  layer6: {
+    position: 'absolute',
+    padding: 138,
+    borderRadius: 138,
+  },
+  layer7: {
+    position: 'absolute',
+  },
+  secondImg: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: '#fff',
   },
 });
