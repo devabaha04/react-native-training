@@ -9,16 +9,20 @@ import {
   ScrollView,
   Image,
   Platform,
+  Dimensions,
 } from 'react-native';
 import IconFontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import {imageLink} from '../../constant';
 
 const Tabs = ['All', 'Income', 'Expense'];
+const {width, height} = Dimensions.get('window');
 
 export default class RecentTransactions extends Component {
   state = {
     indexActive: 0,
+    radarContainerWidth: 0,
+    radarContainerHeight: 0,
   };
 
   handleSelected = (index) => {
@@ -29,19 +33,35 @@ export default class RecentTransactions extends Component {
     'https://static.fullstack.edu.vn/static/media/f8-icon.7ad2b161d5e80c87e516.png',
     'https://static.fullstack.edu.vn/static/media/f8-icon.7ad2b161d5e80c87e516.png',
     'https://static.fullstack.edu.vn/static/media/f8-icon.7ad2b161d5e80c87e516.png',
+    'https://static.fullstack.edu.vn/static/media/f8-icon.7ad2b161d5e80c87e516.png',
+    'https://static.fullstack.edu.vn/static/media/f8-icon.7ad2b161d5e80c87e516.png',
+    'https://static.fullstack.edu.vn/static/media/f8-icon.7ad2b161d5e80c87e516.png',
   ];
+
+  handleLayoutRadarContainer = (e) => {
+    this.setState({
+      radarContainerWidth: e.nativeEvent.layout.width,
+      radarContainerHeight: e.nativeEvent.layout.height,
+    });
+  };
 
   renderImage = ({item, index}) => {
     let startX, startY;
-    startX = Math.floor(((Math.PI * (index - 1)) *  -32) / 2);
-    startY = Math.floor(((Math.PI * index) * 8) * 2);
+    const rw = this.state.radarContainerWidth / 2;
+    const rh = this.state.radarContainerHeight / 2;
+    const alpha = (2 * Math.PI * (index)) / this.imageData.length;
+
+    startX = rw + Math.sin(alpha) * rw - 25 - 1;
+    startY = rh * (1 - Math.cos(alpha)) - 25 - 1 ;
+
     return (
       <View
         style={[
           styles.layer7,
           {
-            top: startY,
+            top:startY,
             left: startX,
+            // zIndex: this.imageData.length - 1 === index ? -1:0
           },
         ]}>
         <Image source={{uri: item}} style={[styles.secondImg]} />
@@ -114,16 +134,29 @@ export default class RecentTransactions extends Component {
             </TouchableOpacity>
           </View>
 
-          <View style={[styles.layer1, {paddingHorizontal: 18}]}>
+          <View style={styles.layer1}>
             <Image source={{uri: imageLink}} style={styles.primaryImg} />
             <View style={styles.layer2}></View>
             <View style={styles.layer3}></View>
             <View style={styles.layer4}></View>
-            <View style={styles.layer5}></View>
-            <View style={styles.layer6}>
-              {this.imageData.map((item, index) =>
-                this.renderImage({item, index}),
-              )}
+            <View
+              style={{
+                position: 'absolute',
+                width: width * 0.7,
+                height: width * 0.7,
+              }}>
+              <View
+                style={[
+                  styles.layer5,
+                  {
+                    borderRadius: (width * 0.7) / 2,
+                  },
+                ]}
+                onLayout={this.handleLayoutRadarContainer}>
+                {this.imageData.map((item, index) =>
+                  this.renderImage({item, index}),
+                )}
+              </View>
             </View>
           </View>
 
@@ -262,49 +295,49 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'relative',
   },
   layer2: {
     position: 'absolute',
     borderWidth: 4,
     borderColor: '#363977',
     borderRadius: 120,
-    padding: 45,
+    width: '23%',
+    height: '23%',
   },
   layer3: {
     position: 'absolute',
     borderWidth: 20,
     borderColor: '#D0DFFE',
     borderRadius: 120,
-    padding: 80,
+    width: '50%',
+    height: '50%',
   },
   layer4: {
     position: 'absolute',
     borderWidth: 2,
     borderColor: '#fff',
     borderRadius: 120,
-    padding: 100,
+    width: '50%',
+    height: '50%',
   },
   layer5: {
     position: 'absolute',
     borderWidth: 1,
     borderColor: '#E2E4FE',
-    borderRadius: 140,
-    padding: 138,
-  },
-  layer6: {
-    position: 'absolute',
-    padding: 138,
-    borderRadius: 138,
+    width: '100%',
+    height: '100%',
   },
   layer7: {
     position: 'absolute',
-  },
-  secondImg: {
     width: 50,
     height: 50,
     borderRadius: 50,
     borderWidth: 2,
     borderColor: '#fff',
+    overflow: 'hidden',
+  },
+  secondImg: {
+    width: '100%',
+    height: '100%',
   },
 });
