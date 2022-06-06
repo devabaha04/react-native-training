@@ -26,5 +26,6 @@ ex: prac1/minhnh
   - Login Screen: 2h20 (30/5)
   - Profile Screen: 7h17 (30/5 - 31/5)
   - Recent Trans Screen: 7h37 (31/5)
-- Training 3: 
+- Training 3: 8h
+- Training 4:
 

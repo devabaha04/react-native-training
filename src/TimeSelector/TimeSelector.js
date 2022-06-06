@@ -1,51 +1,36 @@
-import React, {useState, useCallback, useMemo} from 'react';
+import React, {memo} from 'react';
 import {
   View,
   Text,
   FlatList,
   StyleSheet,
   TouchableOpacity,
-  TouchableHighlight,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import { getTimeData, getPassedTime } from '../helper/getTime';
 import Time from './Time';
 
-export default function TimeSelector() {
-  const [isHorizontal, setIsHorizontal] = useState(false);
-  const numCols = !isHorizontal && 4;
-  const [timeSelected, setTimeSelected] = useState('')
-  const [indexActive, setIndexActive] = useState()
+function TimeSelector({
+  isHorizontal,
+  col,
+  handleChangeLayout,
+  handleSelectedTime,
+  indexActive,
+  timeSelected,
+}) {
+  const numCol = !isHorizontal && col
 
-  const getTimeData = useMemo(() => {
-    let timeArr = []
-    for (let i = 0; i < 24; i++) {
-      for (let j = 0; j < 2; j++) {
-        timeArr.push(i + ':' + (j === 0 ? '00' : 30 * j))
-      }
-    }
-    return timeArr
-  }, [])
-
-  const handleChangeLayout = useCallback(() => {
-    setIsHorizontal((prevState) => !prevState);
-  }, []);
-
-  const handleSelectedTime = (time, indexSelected) => {
-    setTimeSelected(time)
-    setIndexActive(indexSelected)
-  }
-
-  const renderItem = useCallback(
-    ({item, index}) => (
+  const renderItem = ({item, index}) => {
+    return (
       <Time
         key={index}
         time={item}
-        index={index}
-        handleSelectedTime={handleSelectedTime}
+        handleSelectedTime={() => handleSelectedTime(item, index)}
+        itemActive={index === indexActive ? item : ''}
+        passedTime={getPassedTime()}
       />
-    ),
-    [],
-  );
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -60,24 +45,21 @@ export default function TimeSelector() {
           )}
         </TouchableOpacity>
       </View>
-
       <View style={styles.listTimeContainer}>
         <FlatList
-          key={numCols}
+          key={numCol}
           horizontal={isHorizontal}
-          data={getTimeData}
+          data={getTimeData()}
           keyExtractor={(index) => index.toString()}
           renderItem={renderItem}
-          numColumns={numCols}
+          numColumns={numCol}
         />
       </View>
-
-      <TouchableHighlight style={styles.confirmBtn}>
-        <Text style={styles.doneText}>Done</Text>
-      </TouchableHighlight>
     </View>
   );
 }
+
+export default memo(TimeSelector)
 
 const styles = StyleSheet.create({
   container: {
@@ -109,18 +91,5 @@ const styles = StyleSheet.create({
     flex: 1,
     marginVertical: 8,
     marginHorizontal: 8,
-  },
-  confirmBtn: {
-    marginHorizontal: 12,
-    paddingVertical: 12,
-    backgroundColor: '#FD662F',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    borderRadius: 14,
-  },
-  doneText: {
-    color: '#fff',
-    fontSize: 24,
-    fontWeight: '500',
   },
 });

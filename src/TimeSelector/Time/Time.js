@@ -1,18 +1,46 @@
-import React, {useEffect, useState, useMemo, memo} from 'react';
+import React, {useMemo, memo} from 'react';
 import {Text, StyleSheet, TouchableOpacity} from 'react-native';
 
-function Time({time, index, handleSelectedTime}) {
+function Time({time, handleSelectedTime, itemActive, passedTime}) {
+  const styleStatus = useMemo(() => {
+    if (passedTime.includes(time)) {
+      return {
+        backgroundColor: '#EAECED',
+        color: '#CCCCCC',
+      };
+    } else {
+      return {
+        backgroundColor: '#fff',
+        color: '#333',
+      };
+    }
+  }, []);
 
   return (
     <TouchableOpacity
-      style={[styles.container]}
-      onPress={() => handleSelectedTime(time, index)}>
-      <Text style={styles.content}> {time} </Text>
+      disabled={passedTime.includes(time)}
+      style={[
+        styles.container,
+        {
+          backgroundColor:
+            itemActive === time ? '#2C7AFF' : styleStatus.backgroundColor,
+        },
+      ]}
+      onPress={handleSelectedTime}>
+      <Text
+        style={[
+          styles.content,
+          {
+            color: itemActive === time ? '#fff' : styleStatus.color,
+          },
+        ]}>
+        {time}
+      </Text>
     </TouchableOpacity>
   );
 }
 
-export default Time
+export default memo(Time);
 
 const styles = StyleSheet.create({
   container: {
@@ -22,7 +50,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     marginVertical: 8,
     marginHorizontal: 4,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   content: {
     fontSize: 19,
