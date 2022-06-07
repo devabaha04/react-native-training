@@ -1,33 +1,31 @@
-import React, {memo} from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import React, {memo, useCallback} from 'react';
+import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { getTimeData, getPassedTime } from '../helper/getTime';
+import {getTimeData, getPassedTime} from '../helper/getTime';
 import Time from './Time';
 
 function TimeSelector({
   isHorizontal,
   col,
-  handleChangeLayout,
-  handleSelectedTime,
+  onChangeLayout,
+  onSelectedTime,
   indexActive,
   timeSelected,
 }) {
-  const numCol = !isHorizontal && col
+  const numCol = !isHorizontal && col;
+
+  const checkPassedTime = useCallback((time) => {
+    return getPassedTime().includes(time)
+  }, []);
 
   const renderItem = ({item, index}) => {
     return (
       <Time
         key={index}
         time={item}
-        handleSelectedTime={() => handleSelectedTime(item, index)}
+        onSelectedTime={() => onSelectedTime(item, index)}
         itemActive={index === indexActive ? item : ''}
-        passedTime={getPassedTime()}
+        isDisable={checkPassedTime(item)}
       />
     );
   };
@@ -37,15 +35,16 @@ function TimeSelector({
       <View style={styles.headerContainer}>
         <Text style={styles.label}>Select Time: </Text>
         <Text style={styles.timeSelected}> {timeSelected} </Text>
-        <TouchableOpacity style={styles.layoutBtn} onPress={handleChangeLayout}>
+        <TouchableOpacity style={styles.layoutBtn} onPress={onChangeLayout}>
           {isHorizontal ? (
-            <Icon name="grip-horizontal" size={26} color={'#333'} />
+            <Icon name="grip-horizontal" style={styles.iconLayoutBtn} />
           ) : (
-            <Icon name="grip-vertical" size={26} color={'#333'} />
+            <Icon name="grip-vertical" style={styles.iconLayoutBtn} />
           )}
         </TouchableOpacity>
       </View>
-      <View style={styles.listTimeContainer}>
+
+      <View style={[styles.listTimeContainer]}>
         <FlatList
           key={numCol}
           horizontal={isHorizontal}
@@ -53,13 +52,14 @@ function TimeSelector({
           keyExtractor={(index) => index.toString()}
           renderItem={renderItem}
           numColumns={numCol}
+          contentContainerStyle={isHorizontal && styles.flatListCustom}
         />
       </View>
     </View>
   );
 }
 
-export default memo(TimeSelector)
+export default memo(TimeSelector);
 
 const styles = StyleSheet.create({
   container: {
@@ -87,9 +87,18 @@ const styles = StyleSheet.create({
     flex: 2,
     alignItems: 'flex-end',
   },
+  iconLayoutBtn: {
+    fontSize: 26,
+    color: '#333',
+  },
   listTimeContainer: {
     flex: 1,
-    marginVertical: 8,
+    justifyContent: 'center',
+    marginVertical: 6,
     marginHorizontal: 8,
+  },
+  flatListCustom: {
+    flexDirection: 'column',
+    flexWrap: 'wrap',
   },
 });

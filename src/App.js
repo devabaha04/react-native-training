@@ -6,7 +6,8 @@ import {
   StyleSheet,
   Image,
   TouchableHighlight,
-} from 'react-native';
+  Platform
+} from 'react-native'
 import TimeSelector from './TimeSelector';
 import {bannerLink} from './constant';
 
@@ -36,22 +37,26 @@ export default function App() {
       <View style={styles.headerContainer}>
         <Text style={styles.headerContent}>Project Training 3</Text>
       </View>
+      
       <View style={styles.bannerContainer}>
         <Image source={{uri: bannerLink}} style={styles.bannerImg} />
       </View>
+
       <View style={styles.selectBox}>
         <Text style={styles.cinemaLabel}>Location </Text>
         <Text style={styles.cinemaName}>Hanoi, Vietnam</Text>
       </View>
+
       <View style={[styles.selectBox, {flexDirection: 'row'}]}>
         <Text style={styles.calendarLabel}>Calendar: </Text>
         <Text style={styles.calendar}>{DateNow.toDateString()}</Text>
       </View>
+
       <TimeSelector
         isHorizontal={isHorizontal}
         col={4}
-        handleChangeLayout={handleChangeLayout}
-        handleSelectedTime={handleSelectedTime}
+        onChangeLayout={handleChangeLayout}
+        onSelectedTime={handleSelectedTime}
         timeSelected={timeSelected}
         indexActive={indexActive}
       />
@@ -60,7 +65,9 @@ export default function App() {
         disabled={!timeSelected}
         style={[
           styles.confirmBtn,
-          {backgroundColor: !timeSelected ? '#bbb' : '#2C7AFF'},
+          {backgroundColor: !timeSelected ? '#bbb' : '#2C7AFF',
+            marginBottom: Platform.OS === 'ios' ? 0 : 10,
+          },
         ]}
         onPress={handleConfirmTime}>
         <Text
