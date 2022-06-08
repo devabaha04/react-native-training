@@ -1,8 +1,7 @@
 import React, {useMemo, memo} from 'react';
 import {Text, StyleSheet, TouchableOpacity} from 'react-native';
 
-function Time({time, onSelectedTime, itemActive, isDisable}) {
-  
+function Time({time, onSelectedTime, isDisable, isActive}) {
   const styleStatus = useMemo(() => {
     if (isDisable) {
       return {
@@ -15,21 +14,20 @@ function Time({time, onSelectedTime, itemActive, isDisable}) {
         color: '#333',
       };
     }
-  }, []);
+  }, [isDisable]);
 
   const styleItemBtn = useMemo(
     () => ({
-      backgroundColor:
-        itemActive === time ? '#2C7AFF' : styleStatus.backgroundColor,
+      backgroundColor: isActive ? '#2C7AFF' : styleStatus.backgroundColor,
     }),
-    [itemActive],
+    [isActive, styleStatus],
   );
 
   const styleTextBtn = useMemo(
     () => ({
-      color: itemActive === time ? '#fff' : styleStatus.color,
+      color: isActive ? '#fff' : styleStatus.color,
     }),
-    [itemActive],
+    [isActive, styleStatus],
   );
 
   return (
@@ -42,7 +40,15 @@ function Time({time, onSelectedTime, itemActive, isDisable}) {
   );
 }
 
-export default memo(Time);
+const areEquals = (prevProps, nextProps) => {
+  return (
+    prevProps.time === nextProps.time &&
+    prevProps.isDisable === nextProps.isDisable &&
+    prevProps.isActive === nextProps.isActive
+  );
+};
+
+export default memo(Time, areEquals);
 
 const styles = StyleSheet.create({
   container: {
@@ -54,7 +60,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   content: {
     fontSize: 19,

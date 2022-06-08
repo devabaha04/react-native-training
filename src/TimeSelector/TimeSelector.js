@@ -1,7 +1,6 @@
-import React, {memo, useCallback} from 'react';
+import React, {memo} from 'react';
 import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {getTimeData, getPassedTime} from '../helper/getTime';
 import Time from './Time';
 
 function TimeSelector({
@@ -9,23 +8,18 @@ function TimeSelector({
   col,
   onChangeLayout,
   onSelectedTime,
-  indexActive,
+  timeData,
   timeSelected,
 }) {
   const numCol = !isHorizontal && col;
 
-  const checkPassedTime = useCallback((time) => {
-    return getPassedTime().includes(time)
-  }, []);
-
   const renderItem = ({item, index}) => {
     return (
       <Time
-        key={index}
-        time={item}
-        onSelectedTime={() => onSelectedTime(item, index)}
-        itemActive={index === indexActive ? item : ''}
-        isDisable={checkPassedTime(item)}
+        time={item.time}
+        onSelectedTime={() => onSelectedTime(index)}
+        isActive={item.status === 2}
+        isDisable={item.status === 0}
       />
     );
   };
@@ -48,8 +42,8 @@ function TimeSelector({
         <FlatList
           key={numCol}
           horizontal={isHorizontal}
-          data={getTimeData()}
-          keyExtractor={(index) => index.toString()}
+          data={timeData}
+          keyExtractor={(item, index) => item.time}
           renderItem={renderItem}
           numColumns={numCol}
           contentContainerStyle={isHorizontal && styles.flatListCustom}
@@ -98,7 +92,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
   flatListCustom: {
-    flexDirection: 'column',
-    flexWrap: 'wrap',
+    flexDirection: 'row',
   },
 });

@@ -6,30 +6,40 @@ import {
   StyleSheet,
   Image,
   TouchableHighlight,
-  Platform
-} from 'react-native'
+  Platform,
+} from 'react-native';
 import TimeSelector from './TimeSelector';
 import {bannerLink} from './constant';
+import {getPassedTime} from './helper/getTime';
 
 export default function App() {
   const [isHorizontal, setIsHorizontal] = useState(false);
+  const [timeData, setTimeData] = useState(getPassedTime());
   const [timeSelected, setTimeSelected] = useState('');
-  const [indexActive, setIndexActive] = useState();
   const DateNow = new Date();
 
   const handleChangeLayout = useCallback(() => {
     setIsHorizontal((prevState) => !prevState);
   }, []);
 
-  const handleSelectedTime = useCallback((time, indexSelected) => {
-    setTimeSelected(time);
-    setIndexActive(indexSelected);
-  }, []);
+  const handleSelectedTime = useCallback(
+    (indexSelected) => {
+      const timeDataNew = timeData.map((item, index) => {
+        if (index === indexSelected) {
+          setTimeSelected(item.time);
+        }
+        return {
+          ...item,
+          status: index === indexSelected ? 2 : item.status === 0 ? 0 : 1,
+        };
+      });
+      setTimeData(timeDataNew);
+    },
+    [timeData],
+  );
 
   const handleConfirmTime = useCallback(() => {
-    alert(
-      `Selected Successfully! \n ${timeSelected} - ${DateNow.toDateString()} at Hanoi`,
-    );
+    alert(`${timeSelected} - ${DateNow.toDateString()} at Hanoi`);
   }, [timeSelected]);
 
   return (
@@ -37,7 +47,7 @@ export default function App() {
       <View style={styles.headerContainer}>
         <Text style={styles.headerContent}>Project Training 3</Text>
       </View>
-      
+
       <View style={styles.bannerContainer}>
         <Image source={{uri: bannerLink}} style={styles.bannerImg} />
       </View>
@@ -57,15 +67,16 @@ export default function App() {
         col={4}
         onChangeLayout={handleChangeLayout}
         onSelectedTime={handleSelectedTime}
+        timeData={timeData}
         timeSelected={timeSelected}
-        indexActive={indexActive}
       />
 
       <TouchableHighlight
         disabled={!timeSelected}
         style={[
           styles.confirmBtn,
-          {backgroundColor: !timeSelected ? '#bbb' : '#2C7AFF',
+          {
+            backgroundColor: !timeSelected ? '#bbb' : '#2C7AFF',
             marginBottom: Platform.OS === 'ios' ? 0 : 10,
           },
         ]}
