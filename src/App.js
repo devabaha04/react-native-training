@@ -49,16 +49,22 @@ export default function App() {
       }
 
       if (key === ENTER) {
-        console.log(guessDataClone[indexRowActive])
-        let result = ''
-        let isInValid = true
-        guessDataClone[indexRowActive].map((item, index) => {
-          result = result.concat('', item.value)
+        let result = '', char
+        let isInValid = true, correctPosition, correctChar
+        let characterArr
+        guessDataClone[indexRowActive].map((itemCol, indexCol) => {
+          result = result.concat('', itemCol.value)
           wordsList.map((item, index) => {
-            if (item === result) {
-              isInValid = false
+            isInValid = item === result && false
+            if (indexRowActive === index) {
+              characterArr = item.split('')
             }
           })
+           characterArr.map((char, index) => {
+             if (char === itemCol.value) {
+               console.log(itemCol.value, index)
+             }
+           })
         })
 
         if (isInValid) {
