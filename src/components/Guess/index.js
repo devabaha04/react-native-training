@@ -1,1 +1,1 @@
-export {default} from './Guess'
+export {default} from './GuessRow'
