@@ -5,7 +5,7 @@ export const color = {
   grey: '#818384',
   lightgrey: '#d7dadc',
   black: '#121214',
-  white: '#fff'
+  white: '#fff',
 };
 
 export const ENTER = 'Enter';
@@ -22,8 +22,8 @@ export const STATUS = {
   TYPING: 2,
   GREEN: 3,
   YELLOW: 4,
-  GRAY: 5
-}
+  GRAY: 5,
+};
 
 export const WORDS_LIST = [
   'HEART',
@@ -32,7 +32,7 @@ export const WORDS_LIST = [
   'CRUSH',
   'REACT',
   'VUEJS',
-]
+];
 
 export const DARK_THEME = {
   backgroundColor: color.black,
@@ -42,8 +42,8 @@ export const DARK_THEME = {
   primary: color.primary,
   secondary: color.secondary,
   grey: color.grey,
-  white: color.white
-}
+  white: color.white,
+};
 
 export const LIGHT_THEME = {
   backgroundColor: color.white,
@@ -53,5 +53,5 @@ export const LIGHT_THEME = {
   primary: color.primary,
   secondary: color.secondary,
   grey: color.grey,
-  white: color.white
-}
+  white: color.white,
+};

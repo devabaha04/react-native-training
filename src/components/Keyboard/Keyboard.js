@@ -15,9 +15,6 @@ const heightWindow = Math.floor(Dimensions.get('window').height / 20 + 16);
 function Keyboard({onTypingKey, greenCap, yellowCap, grayCap}) {
   const {styleTheme} = useContext(Context);
 
-  console.log(widthWindow)
-  console.log(heightWindow)
-
   const styleKeyboardStatus = useCallback(
     (key) => {
       if (greenCap.includes(key)) {
@@ -78,11 +75,14 @@ function Keyboard({onTypingKey, greenCap, yellowCap, grayCap}) {
     const widthEnterKey = key === 'Enter' && {
       width: widthWindow + 20,
     };
+    const widthClearKey = key === '⌫' && {
+      width: widthWindow + 8
+    }
     return (
       <TouchableHighlight
-        underlayColor={'#ddd'}
+        underlayColor={'#ccc'}
         key={index}
-        style={[styles.keyBtn, widthEnterKey, keyboardStyle(key)]}
+        style={[styles.keyBtn, widthEnterKey, keyboardStyle(key), widthClearKey]}
         onPress={() => onTypingKey(key)}>
         <Text style={[styles.keyText, keyboardTextStyle(key), styleKeyText]}>
           {key}

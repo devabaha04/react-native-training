@@ -10,7 +10,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Keyboard from './components/Keyboard';
 import GuessRow from './components/Guess';
 import {initArr2D} from './helper';
-import {ENTER, CLEAR, WORDS_LIST, DARK_THEME, LIGHT_THEME} from './constant';
+import {ENTER, CLEAR, WORDS_LIST, DARK_THEME, LIGHT_THEME, STATUS} from './constant';
 import Context from './Context';
 
 export default function App() {
@@ -67,7 +67,7 @@ export default function App() {
                 );
                 return {
                   value: (guessDataClone[indexRow][indexCol].value = key),
-                  status: (guessDataClone[indexRow][indexCol].status = 2),
+                  status: (guessDataClone[indexRow][indexCol].status = STATUS.TYPING),
                 };
               }
             }
@@ -101,7 +101,7 @@ export default function App() {
             if (
               getRandomWord.includes(guessDataClone[indexRowActive][col].value)
             ) {
-              guessDataClone[indexRowActive][col].status = 4;
+              guessDataClone[indexRowActive][col].status = STATUS.YELLOW;
               setYellowCap((prevState) => [
                 ...prevState,
                 guessDataClone[indexRowActive][col].value,
@@ -110,7 +110,7 @@ export default function App() {
             if (
               getRandomWord[col] === guessDataClone[indexRowActive][col].value
             ) {
-              guessDataClone[indexRowActive][col].status = 3;
+              guessDataClone[indexRowActive][col].status = STATUS.GREEN;
               setGreenCap((prevState) => [
                 ...prevState,
                 guessDataClone[indexRowActive][col].value,
@@ -122,7 +122,7 @@ export default function App() {
               ) &&
               getRandomWord[col] !== guessDataClone[indexRowActive][col].value
             ) {
-              guessDataClone[indexRowActive][col].status = 5;
+              guessDataClone[indexRowActive][col].status = STATUS.GRAY;
               setGrayCap((prevState) => [
                 ...prevState,
                 guessDataClone[indexRowActive][col].value,
@@ -141,7 +141,7 @@ export default function App() {
             );
             setIndexColActive(0);
           } else {
-            alert('you guessed the word correctly!');
+            alert('You guessed the word correctly!');
           }
         } else {
           alert('Not in word list');
@@ -164,7 +164,7 @@ export default function App() {
     <Context.Provider value={value}>
       <SafeAreaView style={[styles.container, styleContainer]}>
         <View style={styles.headerContainer}>
-          <Text style={[styles.header, styleText]}>Wordle</Text>
+          <Text style={[styles.header, styleText]}>Wordle Game</Text>
 
           <TouchableOpacity onPress={handleSwitchTheme}>
             {darkTheme ? (
