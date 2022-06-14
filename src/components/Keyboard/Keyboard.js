@@ -1,17 +1,70 @@
-import React from 'react';
+import React, {useCallback, useContext, useMemo} from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
+  TouchableHighlight,
   Dimensions,
 } from 'react-native';
 import {KEYS} from '../../constant';
+import Context from '../../Context';
 
-const widthWindow = Math.floor(Dimensions.get('window').width / 20 + 14);
-const heightWindow = Math.floor(Dimensions.get('window').height / 20 + 14);
+const widthWindow = Math.floor(Dimensions.get('window').width / 20 + 12);
+const heightWindow = Math.floor(Dimensions.get('window').height / 20 + 16);
 
-export default function Keyboard({onTypingKey}) {
+function Keyboard({onTypingKey, greenCap, yellowCap, grayCap}) {
+  const {styleTheme} = useContext(Context);
+
+  console.log(widthWindow)
+  console.log(heightWindow)
+
+  const styleKeyboardStatus = useCallback(
+    (key) => {
+      if (greenCap.includes(key)) {
+        return {
+          backgroundColor: styleTheme.primary,
+          color: styleTheme.white,
+        };
+      }
+      if (yellowCap.includes(key)) {
+        return {
+          backgroundColor: styleTheme.secondary,
+          color: styleTheme.white,
+        };
+      }
+      if (grayCap.includes(key)) {
+        return {
+          backgroundColor: styleTheme.grey,
+          color: styleTheme.white,
+        };
+      }
+      return {
+        backgroundColor: styleTheme.surface,
+      };
+    },
+    [greenCap, yellowCap, grayCap, styleTheme],
+  );
+
+  const keyboardStyle = useCallback(
+    (key) => ({
+      backgroundColor: styleKeyboardStatus(key).backgroundColor,
+    }),
+    [styleKeyboardStatus],
+  );
+
+  const keyboardTextStyle = useCallback(
+    (key) => ({
+      color: styleKeyboardStatus(key).color,
+    }),
+    [styleKeyboardStatus],
+  );
+
+  const styleKeyText = useMemo(
+    () => ({
+      color: styleTheme.color,
+    }),
+    [styleTheme],
+  );
 
   const renderKeyboardRow = (row, index) => {
     return (
@@ -26,12 +79,15 @@ export default function Keyboard({onTypingKey}) {
       width: widthWindow + 20,
     };
     return (
-      <TouchableOpacity
+      <TouchableHighlight
+        underlayColor={'#ddd'}
         key={index}
-        style={[styles.keyBtn, widthEnterKey]}
+        style={[styles.keyBtn, widthEnterKey, keyboardStyle(key)]}
         onPress={() => onTypingKey(key)}>
-        <Text style={[styles.keyText]}>{key}</Text>
-      </TouchableOpacity>
+        <Text style={[styles.keyText, keyboardTextStyle(key), styleKeyText]}>
+          {key}
+        </Text>
+      </TouchableHighlight>
     );
   };
 
@@ -42,12 +98,13 @@ export default function Keyboard({onTypingKey}) {
   );
 }
 
+export default React.memo(Keyboard);
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-end',
-    marginBottom: 15,
-    marginHorizontal: 15,
+    marginBottom: 22,
   },
   keyboardRow: {
     flexDirection: 'row',
@@ -56,7 +113,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   keyBtn: {
-    backgroundColor: '#d7dadc',
     width: widthWindow,
     height: heightWindow,
     marginHorizontal: 3,
@@ -65,7 +121,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   keyText: {
-    color: '#121214',
     fontSize: 16,
     fontWeight: '500',
   },

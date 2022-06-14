@@ -11,13 +11,14 @@
   
 - Training 3: 8h
   
-- Training 4: 
+- Training 4: 28h
   - Day 1: 6h
   - Day 2: 8h
-  - Day 3: 
+  - Day 3: 4h40
+  - Day 4: 6h54
+  - Day 5: 3h
 
 
-from 9h to 
 
 Kiểm tra từ 
 

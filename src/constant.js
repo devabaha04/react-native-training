@@ -5,6 +5,7 @@ export const color = {
   grey: '#818384',
   lightgrey: '#d7dadc',
   black: '#121214',
+  white: '#fff'
 };
 
 export const ENTER = 'Enter';
@@ -32,3 +33,25 @@ export const WORDS_LIST = [
   'REACT',
   'VUEJS',
 ]
+
+export const DARK_THEME = {
+  backgroundColor: color.black,
+  color: color.white,
+  surface: color.darkgrey,
+  onSurface: color.lightgrey,
+  primary: color.primary,
+  secondary: color.secondary,
+  grey: color.grey,
+  white: color.white
+}
+
+export const LIGHT_THEME = {
+  backgroundColor: color.white,
+  color: color.black,
+  surface: color.lightgrey,
+  onSurface: color.darkgrey,
+  primary: color.primary,
+  secondary: color.secondary,
+  grey: color.grey,
+  white: color.white
+}
