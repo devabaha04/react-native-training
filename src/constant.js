@@ -8,8 +8,11 @@ export const color = {
   white: '#fff',
 };
 
-export const ENTER = 'Enter';
+export const ENTER = 'Ent';
 export const CLEAR = '⌫';
+
+export const MAX_COL = 5
+export const MAX_ROW = 6
 
 export const KEYS = [
   ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
@@ -37,7 +40,9 @@ export const WORDS_LIST = [
   'YIELD',
   'YOURS',
   'YARNS',
-  'YEARS'
+  'YEARS',
+  'GRASS',
+  'GREEN'
 ];
 
 export const DARK_THEME = {

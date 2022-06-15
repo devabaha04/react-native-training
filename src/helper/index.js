@@ -1,4 +1,4 @@
-import { STATUS } from "../constant";
+import { STATUS, KEYS } from "../constant";
 
 export const initArr2D = () => {
   let guessArrTotal = new Array();
@@ -10,3 +10,14 @@ export const initArr2D = () => {
   }
   return guessArrTotal;
 };
+
+export const keyBoard = () => {
+  return KEYS.map((row, indexRow) => {
+    return row.map((key, indexKey) => {
+      return {
+        value: key,
+        status: STATUS.NORMAL
+      }
+    })
+  })
+} 

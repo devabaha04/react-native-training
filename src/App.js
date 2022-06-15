@@ -30,7 +30,7 @@ export default function App() {
   const [darkTheme, setDarkTheme] = useState(false);
   const [styleTheme, setStyleTheme] = useState({});
 
-  const getRandomWord = useMemo(() => {
+  const keyWord = useMemo(() => {
     return WORDS_LIST[Math.floor(Math.random() * 12)].split('');
   }, []);
 
@@ -98,11 +98,11 @@ export default function App() {
           wordGuessed = wordGuessed.concat('', guessDataClone[indexRowActive][i].value);
         }
         if (
-          indexColActive === guessDataClone[indexRowActive].length &&
-          WORDS_LIST.includes(wordGuessed)
+          indexColActive === guessDataClone[indexRowActive].length 
+          && WORDS_LIST.includes(wordGuessed)
         ) {
           checkingWord(guessDataClone);
-          if (wordGuessed !== getRandomWord.join('')) {
+          if (wordGuessed !== keyWord.join('')) {
             setIndexRowActive((prevState) =>
               prevState <= 5 ? prevState + 1 : 0,
             );
@@ -117,32 +117,30 @@ export default function App() {
 
       setGuessData(guessDataClone);
     },
-    [indexRowActive, indexColActive, getRandomWord],
+    [indexRowActive, indexColActive, keyWord, guessData],
   );
 
   const checkingWord = useCallback(
     (guessDataClone) => {
       for (let col = 0; col < 5; col++) {
-        if (getRandomWord.includes(guessDataClone[indexRowActive][col].value)) {
-          guessDataClone[indexRowActive][col].status = STATUS.YELLOW;
-          setYellowCap((prevState) => [
-            ...prevState,
-            guessDataClone[indexRowActive][col].value,
-          ]);
-        }
         if (
-          getRandomWord.includes(guessDataClone[indexRowActive][col].value) &&
-          getRandomWord[col] === guessDataClone[indexRowActive][col].value
+          keyWord.includes(guessDataClone[indexRowActive][col].value) &&
+          keyWord[col] === guessDataClone[indexRowActive][col].value
         ) {
           guessDataClone[indexRowActive][col].status = STATUS.GREEN;
           setGreenCap((prevState) => [
             ...prevState,
             guessDataClone[indexRowActive][col].value,
           ]);
-        }
-        if (
-          !getRandomWord.includes(guessDataClone[indexRowActive][col].value) &&
-          getRandomWord[col] !== guessDataClone[indexRowActive][col].value
+        } else if (keyWord.includes(guessDataClone[indexRowActive][col].value)) {
+          guessDataClone[indexRowActive][col].status = STATUS.YELLOW;
+          setYellowCap((prevState) => [
+            ...prevState,
+            guessDataClone[indexRowActive][col].value,
+          ]);
+        } else if (
+          !keyWord.includes(guessDataClone[indexRowActive][col].value) &&
+          keyWord[col] !== guessDataClone[indexRowActive][col].value
         ) {
           guessDataClone[indexRowActive][col].status = STATUS.GRAY;
           setGrayCap((prevState) => [
@@ -152,7 +150,7 @@ export default function App() {
         }
       }
     },
-    [getRandomWord, indexRowActive],
+    [keyWord, indexRowActive],
   );
 
   const renderGuessRow = (row, indexRow) => (
@@ -167,11 +165,11 @@ export default function App() {
     <Context.Provider value={value}>
       <SafeAreaView style={[styles.container, styleContainer]}>
         <View style={styles.headerContainer}>
-          <Text style={[styles.header, styleText]}>Wordle</Text>
+          <Text style={[styles.header, styleText]}>Wordle {keyWord}</Text>
 
           <TouchableOpacity onPress={handleSwitchTheme}>
             {darkTheme ? (
-              <Icon
+              <Icon 
                 name="weather-night"
                 style={[styles.iconTheme, styleText]}
               />

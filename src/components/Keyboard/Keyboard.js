@@ -4,13 +4,9 @@ import {
   Text,
   StyleSheet,
   TouchableHighlight,
-  Dimensions,
 } from 'react-native';
 import {KEYS} from '../../constant';
 import Context from '../../Context';
-
-const widthWindow = Math.floor(Dimensions.get('window').width / 20 + 12);
-const heightWindow = Math.floor(Dimensions.get('window').height / 20 + 16);
 
 function Keyboard({onTypingKey, greenCap, yellowCap, grayCap}) {
   const {styleTheme} = useContext(Context);
@@ -56,13 +52,6 @@ function Keyboard({onTypingKey, greenCap, yellowCap, grayCap}) {
     [styleKeyboardStatus],
   );
 
-  const styleKeyText = useMemo(
-    () => ({
-      color: styleTheme.color,
-    }),
-    [styleTheme],
-  );
-
   const renderKeyboardRow = (row, index) => {
     return (
       <View style={styles.keyboardRow} key={index}>
@@ -72,19 +61,13 @@ function Keyboard({onTypingKey, greenCap, yellowCap, grayCap}) {
   };
 
   const renderKeyboardItem = (key, index) => {
-    const widthEnterKey = key === 'Enter' && {
-      width: widthWindow + 20,
-    };
-    const widthClearKey = key === '⌫' && {
-      width: widthWindow + 8
-    }
     return (
       <TouchableHighlight
         underlayColor={'#ccc'}
         key={index}
-        style={[styles.keyBtn, widthEnterKey, keyboardStyle(key), widthClearKey]}
+        style={[styles.keyBtn, keyboardStyle(key)]}
         onPress={() => onTypingKey(key)}>
-        <Text style={[styles.keyText, keyboardTextStyle(key), styleKeyText]}>
+        <Text style={[styles.keyText, keyboardTextStyle(key)]}>
           {key}
         </Text>
       </TouchableHighlight>
@@ -113,15 +96,15 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   keyBtn: {
-    width: widthWindow,
-    height: heightWindow,
     marginHorizontal: 3,
     borderRadius: 2,
     alignItems: 'center',
     justifyContent: 'center',
+    flex: 1
   },
   keyText: {
     fontSize: 16,
     fontWeight: '500',
+    paddingVertical: 18
   },
 });
