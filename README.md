@@ -4,6 +4,7 @@
 
 ## Estimate Time Completed
 - Training 1: 10h30 
+- 
 - Training 2: 17h
   - Login Screen: 2h20 (30/5)
   - Profile Screen: 7h17 (30/5 - 31/5)
@@ -16,7 +17,7 @@
   - Day 2: 8h
   - Day 3: 4h40
   - Day 4: 6h54
-  - Day 5: 3h
+  - Day 5: 5h
 
 
 

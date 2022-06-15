@@ -32,6 +32,12 @@ export const WORDS_LIST = [
   'CRUSH',
   'REACT',
   'VUEJS',
+  'YOUNG',
+  'YOUTH',
+  'YIELD',
+  'YOURS',
+  'YARNS',
+  'YEARS'
 ];
 
 export const DARK_THEME = {
