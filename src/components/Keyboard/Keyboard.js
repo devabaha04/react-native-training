@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useMemo} from 'react';
+import React, {useCallback, useContext} from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import {KEYS} from '../../constant';
+import { keyBoard } from '../../helper';
 import Context from '../../Context';
 
 function Keyboard({onTypingKey, greenCap, yellowCap, grayCap}) {
