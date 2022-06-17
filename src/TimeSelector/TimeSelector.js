@@ -1,7 +1,8 @@
-import React, {memo} from 'react';
+import React, {memo, useMemo} from 'react';
 import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Time from './Time';
+import {getHorizontalData} from '../helper/getTime';
 
 function TimeSelector({
   isHorizontal,
@@ -13,14 +14,43 @@ function TimeSelector({
 }) {
   const numCol = !isHorizontal && col;
 
-  const renderItem = ({item, index}) => {
+  const timeList = useMemo(() => {
+    const result = [];
+    let blockTimes = [];
+    if (isHorizontal) {
+      return getHorizontalData(timeData, col);
+    } else {
+      timeData.forEach((time, index) => {
+        blockTimes.push(time);
+        if ((index + 1) % 12 === 0 || index === timeData.length - 1) {
+          result.push(blockTimes);
+          blockTimes = [];
+        }
+      });
+    }
+    return result;
+  }, [isHorizontal, timeData, col, getHorizontalData]);
+
+  const renderItem = ({item, indexRow}) => {
     return (
-      <Time
-        time={item.time}
-        onSelectedTime={() => onSelectedTime(index)}
-        isActive={item.status === 2}
-        isDisable={item.status === 0}
-      />
+      <View
+        style={
+          isHorizontal
+            ? {flex: 1}
+            : {flexDirection: 'column', flex: 1, justifyContent: 'center'}
+        }>
+        {item.map((block, indexCol) => {
+          return (
+            <Time
+              key={indexCol}
+              time={block.time}
+              onSelectedTime={() => onSelectedTime(block)}
+              isActive={block.status === 2}
+              isDisable={block.status === 0}
+            />
+          );
+        })}
+      </View>
     );
   };
 
@@ -42,8 +72,8 @@ function TimeSelector({
         <FlatList
           key={numCol}
           horizontal={isHorizontal}
-          data={timeData}
-          keyExtractor={(item, index) => item.time}
+          data={timeList}
+          keyExtractor={(item, index) => index}
           renderItem={renderItem}
           numColumns={numCol}
           contentContainerStyle={isHorizontal && styles.flatListCustom}

@@ -23,14 +23,14 @@ export default function App() {
   }, []);
 
   const handleSelectedTime = useCallback(
-    (indexSelected) => {
+    (timeSelected) => {
       const timeDataNew = timeData.map((item, index) => {
-        if (index === indexSelected) {
+        if (item.time === timeSelected.time) {
           setTimeSelected(item.time);
         }
         return {
           ...item,
-          status: index === indexSelected ? 2 : item.status === 0 ? 0 : 1,
+          status: item === timeSelected ? 2 : item.status === 0 ? 0 : 1,
         };
       });
       setTimeData(timeDataNew);

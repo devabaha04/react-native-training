@@ -53,8 +53,6 @@ export default memo(Time, areEquals);
 const styles = StyleSheet.create({
   container: {
     borderRadius: 10,
-    paddingVertical: 8,
-    paddingHorizontal: 6,
     marginVertical: 6,
     marginHorizontal: 4,
     backgroundColor: '#fff',
@@ -63,6 +61,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   content: {
+    paddingVertical: 8,
+    paddingHorizontal: 6,
     fontSize: 19,
     fontWeight: '600',
     textAlign: 'center',
