@@ -5,7 +5,7 @@ import {
   StyleSheet,
   TouchableHighlight,
 } from 'react-native';
-import {KEYS} from '../../constant';
+import {color, KEYS} from '../../constant';
 import { keyBoard } from '../../helper';
 import Context from '../../Context';
 
@@ -48,9 +48,9 @@ function Keyboard({onTypingKey, greenCap, yellowCap, grayCap}) {
 
   const keyboardTextStyle = useCallback(
     (key) => ({
-      color: styleKeyboardStatus(key).color,
+      color: color.white,
     }),
-    [styleKeyboardStatus],
+    [styleKeyboardStatus, color],
   );
 
   const renderKeyboardRow = (row, index) => {
