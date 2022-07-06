@@ -1,19 +1,20 @@
 import React from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
-  StatusBar,
+  View
 } from 'react-native';
+import Sun from './src/Sun';
 
 const App = () => {
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView></SafeAreaView>
-    </>
+    <View style={{ flex:1  }} >
+      <Sun />
+    </View>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+
+});
 
 export default App;
