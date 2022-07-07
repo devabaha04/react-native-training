@@ -1,4 +1,4 @@
-import React, {useCallback, useState, useEffect, useMemo} from 'react';
+import React, {useCallback, useState, useEffect, useMemo, useRef} from 'react';
 import {
   Animated,
   Button,
@@ -76,6 +76,9 @@ const Sun = () => {
   const [animatedSpin] = useState(new Animated.Value(0));
   const [isShow, setIsShow] = useState(undefined);
 
+  const rotationAnimation = useRef();
+  const translationAnimation = useRef();
+
   useEffect(() => {
     if (isShow === undefined) return;
     if (isShow) {
@@ -87,29 +90,44 @@ const Sun = () => {
 
   const rotateAnimation = useCallback(
     (toValue) => {
+      const duration = 200;
+      const delay = 100;
+      if(rotationAnimation.current){
+        rotationAnimation.current.stop();
+      }
+
       let animations = [];
       if (isShow) {
         animatedRotateArr.map((animation, index) => {
           animations.push(
-            Animated.timing(animation, {
-              toValue: toValue,
-              duration: 1000 / animatedRotateArr.length,
-              easing: Easing.linear,
-              useNativeDriver: true,
-            }),
-            Animated.timing(animatedTranslateArr[index], {
-              toValue: toValue,
-              duration: 1000 / animatedTranslateArr.length,
-              useNativeDriver: true,
-            }),
-            Animated.timing(fadeAnim, {
-              toValue: toValue,
-              duration: 1000 / animatedTranslateArr.length,
-              useNativeDriver: true,
-            }),
+            Animated.parallel(
+              [
+                Animated.timing(animation, {
+                  toValue: toValue,
+                  duration,
+                  easing: Easing.linear,
+                  useNativeDriver: true,
+                }),
+                Animated.timing(animatedTranslateArr[index], {
+                  toValue: toValue,
+                  duration,
+                  useNativeDriver: true,
+                }),
+                Animated.timing(fadeAnim, {
+                  toValue: toValue,
+                  duration,
+                  useNativeDriver: true,
+                }),
+              ],
+              {
+                stopTogether: false,
+              },
+            ),
           );
         });
-        return Animated.stagger(100, animations).start(({finished}) => {
+        rotationAnimation.current = Animated.stagger(delay, animations);
+
+        rotationAnimation.current.start(({finished}) => {
           animations = [];
           if (finished) {
             Animated.spring(animatedSpin, {
@@ -125,22 +143,25 @@ const Sun = () => {
           }
         });
       } else {
-        animatedTranslateArr.map((animation, index) => {
+        [...animatedTranslateArr].reverse().map((animation, index) => {
           animations.push(
-            Animated.timing(animatedRotateArr[index], {
-              toValue: toValue,
-              duration: 1000 / animatedRotateArr.length,
-              easing: Easing.linear,
-              useNativeDriver: true,
-            }),
-            Animated.timing(animation, {
-              toValue: 2,
-              duration: 1000 / animatedTranslateArr.length,
-              useNativeDriver: true,
-            }),
+            Animated.parallel([
+              Animated.timing(animatedRotateArr[(animatedRotateArr.length - 1) - index], {
+                toValue: toValue,
+                duration,
+                easing: Easing.linear,
+                useNativeDriver: true,
+              }),
+              Animated.timing(animation, {
+                toValue: 2,
+                duration,
+                useNativeDriver: true,
+              }),
+            ]),
           );
         });
-        return Animated.stagger(200, animations).start(({finished}) => {
+        rotationAnimation.current = Animated.stagger(delay, animations);
+        rotationAnimation.current.start(({finished}) => {
           if (finished) {
             animatedTranslateArr.map((animation, index) => {
               Animated.timing(animation, {
