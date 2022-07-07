@@ -132,7 +132,7 @@ const Sun = () => {
           if (finished) {
             Animated.spring(animatedSpin, {
               toValue: 2,
-              mass: 6,
+              mass: 4,
               useNativeDriver: true,
               easing: Easing.bounce,
             }).start(({finished}) => {
@@ -143,16 +143,16 @@ const Sun = () => {
           }
         });
       } else {
-        [...animatedTranslateArr].reverse().map((animation, index) => {
+        [...animatedRotateArr].reverse().map((animation, index) => {
           animations.push(
             Animated.parallel([
-              Animated.timing(animatedRotateArr[(animatedRotateArr.length - 1) - index], {
+              Animated.timing(animation, {
                 toValue: toValue,
                 duration,
                 easing: Easing.linear,
                 useNativeDriver: true,
               }),
-              Animated.timing(animation, {
+              Animated.timing(animatedTranslateArr[(animatedTranslateArr.length - 1) - index], {
                 toValue: 2,
                 duration,
                 useNativeDriver: true,
