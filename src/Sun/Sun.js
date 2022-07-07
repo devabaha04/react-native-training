@@ -2,6 +2,7 @@ import React, {useCallback, useState, useMemo, useEffect} from 'react';
 import {
   Animated,
   Button,
+  Easing,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -9,7 +10,7 @@ import {
 } from 'react-native';
 
 const r = 50;
-const totalSunRays = Array.from({length: (2 * Math.PI * r) / 20});
+const sunRays = Array.from({length: (2 * Math.PI * r) / 20});
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -36,7 +37,7 @@ const styles = StyleSheet.create({
   },
   sunTitle: {
     fontWeight: '700',
-    color: 'purple',
+    color: 'red',
     position: 'absolute',
   },
   sunRayContainer: {
@@ -46,26 +47,113 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  sunRay: {
+    borderLeftWidth: 10,
+    borderRightWidth: 10,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderTopWidth: 40,
+    borderTopColor: 'red',
+    borderTopLeftRadius: r / 2,
+    borderTopRightRadius: r / 2,
+  },
+  lineSunRay: {
+    width: 2,
+    height: '100%',
+    backgroundColor: '#F48604',
+    position: 'absolute',
+  },
 });
 
 const Sun = () => {
-  const [animatedRotate] = useState(
-    totalSunRays.map((_, i) => new Animated.Value(0)),
+  const [animatedRotateArr] = useState(
+    sunRays.map((_, i) => new Animated.Value(0)),
   );
-  const [animatedTranslate] = useState(
-    totalSunRays.map((_, i) => new Animated.Value(0)),
+  const [animatedTranslateArr] = useState(
+    sunRays.map((_, i) => new Animated.Value(0)),
   );
+  const [fadeAnim] = useState(new Animated.Value(0));
   const [animatedSpin] = useState(new Animated.Value(0));
-  const [isShow, setIsShow] = useState(false)
+  const [isShow, setIsShow] = useState(undefined);
+
+  const rotateAnimation = useCallback((toValue) => {
+    let animations = []
+    if (isShow){
+      animatedRotateArr.map((animation, index) => {
+          animations.push(Animated.timing(animation, {
+            toValue: toValue,
+            duration: 40,
+            easing: Easing.linear,
+            useNativeDriver: true,
+          }),
+          Animated.timing(animatedTranslateArr[index], {
+            toValue: 1,
+            duration: 40,
+            useNativeDriver: true,
+            }),
+            Animated.timing(fadeAnim, {
+              toValue: 1,
+              duration: 40,
+              useNativeDriver: true
+            })
+          )
+      });
+      return Animated.stagger(100 ,animations).start(({finished}) => {
+        animations = []
+      });
+    } else {
+      animatedTranslateArr.map((animation, index) => {
+        animations.push(
+          Animated.timing(animatedRotateArr[index], {
+            toValue: toValue,
+            duration: 40,
+            easing: Easing.linear,
+            useNativeDriver: true,
+          }),
+          Animated.timing(animation, {
+            toValue: 2,
+            duration: 200,
+            useNativeDriver: true,
+            }),
+        )
+      })
+      return Animated.stagger(400, animations).start(({finished}) => {
+
+      })
+    }
+
+    
+  }, [animatedRotateArr, isShow, animatedTranslateArr]);
+
+  // const translateAnimation = useCallback(() => {
+  //    const animatedTranslateCopy = [...animatedTranslateArr]
+  //     const animations = animatedTranslateCopy.map((animation, index) => {
+  //        return Animated.timing(animation, {
+  //        toValue: 1,
+  //        duration: 200,
+  //        useNativeDriver: true,
+  //        })
+  //    })
+  //   return Animated.sequence(animations).start()
+  // }, [fadeAnim, animatedTranslateArr])
+
+  useEffect(() => {
+    if (isShow === undefined) return;
+    if (isShow) {
+      rotateAnimation(1);
+      // translateAnimation()
+    } else {
+      rotateAnimation(0);
+    }
+  }, [isShow, rotateAnimation]);
 
   const handleToggle = useCallback(() => {
-    setIsShow(prevValue => !prevValue)
-  }, [])
+    setIsShow((prevValue) => !prevValue);
+  }, []);
 
-
-  const renderSunRay = useCallback(() => {
-    return totalSunRays.map((_, index) => {
-      const alpha = (2 * Math.PI * index) / totalSunRays.length;
+  const renderSunRay = useCallback(
+    (index) => {
+      const alpha = (2 * Math.PI * index) / sunRays.length;
 
       return (
         <Animated.View
@@ -74,41 +162,47 @@ const Sun = () => {
             styles.sunRayContainer,
             {
               transform: [
-                {translateX: r + Math.sin(alpha) * r - 10 },
+                {translateX: r + Math.sin(alpha) * r - 10},
                 {translateY: r - Math.cos(alpha) * r - 20},
                 {
-                  rotate: animatedRotate[index].interpolate({
+                  rotate: animatedRotateArr[index].interpolate({
                     inputRange: [0, 1],
                     outputRange: [
-                      (360 * index) / totalSunRays.length  + 'deg',
-                      (360 * index) / totalSunRays.length + 180 + 'deg',
+                      `${(360 * index) / sunRays.length}deg`,
+                      `${(360 * index) / sunRays.length + 180}deg`,
                     ],
                   }),
                 },
-                {translateY: 20}
+                {translateY: 20},
               ],
             },
           ]}>
-          <View
-            style={{
-              borderLeftWidth: 10,
-              borderRightWidth: 10,
-              borderLeftColor: 'transparent',
-              borderRightColor: 'transparent',
-              borderTopWidth: 40,
-              borderTopColor: 'red',
-              borderTopLeftRadius: r / 2,
-              borderTopRightRadius: r / 2,
-            }}></View>
+          <View style={styles.sunRay}></View>
+          <Animated.View
+            style={[
+              styles.lineSunRay,
+              {
+                transform: [
+                  {
+                    translateY: animatedTranslateArr[index].interpolate({
+                      inputRange: [0, 1, 2],
+                      outputRange: [12, 60, 600]
+                    })
+                  }
+                ],
+                opacity: fadeAnim,
+              },
+            ]}></Animated.View>
         </Animated.View>
       );
-    });
-  }, [totalSunRays, r, animatedRotate]);
+    },
+    [r, animatedRotateArr, animatedTranslateArr, fadeAnim, sunRays],
+  );
 
   return (
     <SafeAreaView style={styles.wrapper}>
       <View style={styles.container}>
-        {renderSunRay()}
+        {sunRays.map((_, index) => renderSunRay(index))}
 
         <View style={styles.innerSunContainer}>
           <View style={styles.innerSun}></View>
@@ -116,7 +210,7 @@ const Sun = () => {
         </View>
       </View>
 
-      <Button title="toggle" onPress={handleToggle} />
+      <Button title="Click me!" onPress={handleToggle} />
     </SafeAreaView>
   );
 };
